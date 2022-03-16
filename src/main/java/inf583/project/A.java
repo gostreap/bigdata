@@ -5,6 +5,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.rdd.RDD;
+import java.util.List;
 
 import scala.Tuple2;
 
@@ -55,15 +56,19 @@ public class A {
     	sc.setLogLevel("ERROR");
     	
     	JavaRDD<String> input = sc.textFile(inputFile);
-    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n));
-    	
-    	JavaPairRDD<Integer, Integer> tuples = integers.mapToPair(n -> new Tuple2<>(n, 1));
-    	JavaPairRDD<Integer, Integer> counts = tuples.reduceByKey((a,b) -> a+b);
-    	JavaRDD<Integer> integers_set = counts.map((a, b) -> a);
+    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n)).distinct();
+    	List<Integer> set_integers = integers.collect();
+    	//JavaPairRDD<Integer, Integer> tuples = integers.mapToPair(n -> new Tuple2<>(n, 1));
+    	//JavaPairRDD<Integer, Integer> counts = tuples.reduceByKey((a,b) -> a+b);
+    	//JavaRDD<Integer> integers_set = counts.map((a, b) -> a);
     	
     	System.out.println("#############################");
-    	System.out.println("Question A.2. (Spark Version)");
-		System.out.println("The average of all the integers is " + (double) res._1 / res._2 + ".");
+    	System.out.println("Question A.3. (Spark Version)");
+		//System.out.println("The average of all the integers is " + (double) res._1 / res._2 + ".");
+    	System.out.println("The set of unique integer is : ");
+    	for(int i=0; i<set_integers.size(); i++) {
+    		System.out.println(set_integers.get(i));
+    	}
 		System.out.println("#############################");
 		
 		sc.close();
@@ -72,6 +77,7 @@ public class A {
 	public static void main(String[] args) {
 		question1_spark();
 		question2_spark();
+		question3_spark();
 	}
 
 }
