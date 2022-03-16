@@ -4,7 +4,6 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.rdd.RDD;
 import java.util.List;
 
 import scala.Tuple2;
@@ -56,19 +55,20 @@ public class A {
     	sc.setLogLevel("ERROR");
     	
     	JavaRDD<String> input = sc.textFile(inputFile);
-    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n)).distinct();
-    	List<Integer> set_integers = integers.collect();
-    	//JavaPairRDD<Integer, Integer> tuples = integers.mapToPair(n -> new Tuple2<>(n, 1));
-    	//JavaPairRDD<Integer, Integer> counts = tuples.reduceByKey((a,b) -> a+b);
-    	//JavaRDD<Integer> integers_set = counts.map((a, b) -> a);
+    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n));
+
+//    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n)).distinct();
+//    	List<Integer> set_integers = integers.collect();
+    	
+    	JavaPairRDD<Integer, Integer> tuples = integers.mapToPair(n -> new Tuple2<>(n, 1));
+    	JavaPairRDD<Integer, Integer> counts = tuples.reduceByKey((a,b) -> 1);
+    	JavaRDD<Integer> integers_set = counts.map(x -> x._1);
     	
     	System.out.println("#############################");
     	System.out.println("Question A.3. (Spark Version)");
 		//System.out.println("The average of all the integers is " + (double) res._1 / res._2 + ".");
     	System.out.println("The set of unique integer is : ");
-    	for(int i=0; i<set_integers.size(); i++) {
-    		System.out.println(set_integers.get(i));
-    	}
+    	integers_set.foreach(x -> System.out.println(x));
 		System.out.println("#############################");
 		
 		sc.close();
@@ -81,11 +81,20 @@ public class A {
     	
     	JavaRDD<String> input = sc.textFile(inputFile);
     	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n)).distinct();
+
+//    	JavaRDD<Integer> integers_set = integers.distinct();
+//    	Long count = integers_set.count();
     	
-    	Long count = integers.count();
+    	JavaPairRDD<Integer, Integer> tuples = integers.mapToPair(n -> new Tuple2<>(n, 1));
+    	JavaPairRDD<Integer, Integer> counts = tuples.reduceByKey((a,b) -> 1);
+    	JavaRDD<Integer> integers_set = counts.map(x -> x._1);
+    	
+    	JavaRDD<Integer> ones = integers_set.map(n -> 1);
+    	Integer count = ones.reduce((a,b) -> a + b);
+    	
     	System.out.println("#############################");
     	System.out.println("Question A.4. (Spark Version)");
-    	System.out.println("The number of distinct element is : "+ count+ ".");
+    	System.out.println("The number of distinct element is : "+ count + ".");
 		System.out.println("#############################");
 		
 		sc.close();
