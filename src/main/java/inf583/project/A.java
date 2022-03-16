@@ -74,10 +74,28 @@ public class A {
 		sc.close();
 	}
 	
+	public static void question4_spark() {
+		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("wordCount");
+		JavaSparkContext sc = new JavaSparkContext(conf);
+    	sc.setLogLevel("ERROR");
+    	
+    	JavaRDD<String> input = sc.textFile(inputFile);
+    	JavaRDD<Integer> integers = input.map(n -> Integer.parseInt(n)).distinct();
+    	
+    	Long count = integers.count();
+    	System.out.println("#############################");
+    	System.out.println("Question A.4. (Spark Version)");
+    	System.out.println("The number of distinct element is : "+ count+ ".");
+		System.out.println("#############################");
+		
+		sc.close();
+	}
+	
 	public static void main(String[] args) {
 		question1_spark();
 		question2_spark();
 		question3_spark();
+		question4_spark();
 	}
 
 }
