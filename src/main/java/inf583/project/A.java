@@ -66,7 +66,6 @@ public class A {
     	
     	System.out.println("#############################");
     	System.out.println("Question A.3. (Spark Version)");
-		//System.out.println("The average of all the integers is " + (double) res._1 / res._2 + ".");
     	System.out.println("The set of unique integer is : ");
     	integers_set.foreach(x -> System.out.println(x));
 		System.out.println("#############################");
