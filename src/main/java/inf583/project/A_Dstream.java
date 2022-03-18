@@ -97,7 +97,6 @@ public class A_Dstream {
 	
 	//static Integer count  = 0;
 	static Tuple2<Double,Integer> avg  = new Tuple2(0.0,0);
-	
 	public static void question2_spark_streaming() throws IOException {
 		avg  = new Tuple2(0.0,0);
 		count = 0;
@@ -137,11 +136,13 @@ public class A_Dstream {
 			jssc.stop();
 			System.out.println("The avg after 30 secondes of streaming is: "+ new Double(avg._1/avg._2) );
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch  block
 			e.printStackTrace();
 		}
 		sc.close();
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		try {
