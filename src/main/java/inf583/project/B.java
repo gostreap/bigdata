@@ -31,9 +31,9 @@ public class B {
     	
     	JavaPairRDD<String,Double> r = input.mapToPair(line -> new Tuple2<>(String.valueOf(line.split(" ")[0]),new Double(1.0))); //creating r0
     	
-    	final Double norm = r.map(x->x._2).reduce((a,b)-> a+ b*b);
+    	final Double norm = r.map(x->x._2*x._2).reduce((a,b)-> a+b);
     	
-    	
+    	//System.out.println(norm);
     	r = r.mapValues(x -> x/norm);
     	
     	//creating new A
@@ -52,9 +52,9 @@ public class B {
     	});
     	
     	for(int t =1; t< T; t++) {
-    		JavaPairRDD<String,Double> r_t = A.join(r).mapToPair(x->new Tuple2<>(x._1,x._2._2))
+    		JavaPairRDD<String,Double> r_t = A.join(r).mapToPair(x->new Tuple2<>(x._2._1,x._2._2))
     				.reduceByKey((a,b) -> a+b);
-    		final Double norm2 = r_t.map(x->x._2).reduce((a,b)-> a + b*b);
+    		final Double norm2 = r_t.map(x->x._2*x._2).reduce((a,b)-> a + b);
     		r_t = r_t.mapValues(x -> x/Math.sqrt(norm2));
     		r = r_t;
     		
@@ -86,7 +86,7 @@ public class B {
     		return new Tuple2<>(arrLine[0], arrLine[1]);
     	});
     	
-    	JavaPairRDD<String,Double> eigenVector = question1_spark(10, false, sc);
+    	JavaPairRDD<String,Double> eigenVector = question1_spark(4, false, sc);
     	
     	final Tuple2<String,Double>best_eigenCoordinate = eigenVector.map(x->x).reduce((a,b)->{
     		if (a._2>b._2) {
@@ -111,7 +111,7 @@ public class B {
 	
 	
 	public static void main(String[] args) {
-		//question1_spark(10,true,null);
+		//question1_spark(3,true,null);
 		question2_spark();
 	}
 }
