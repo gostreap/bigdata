@@ -9,7 +9,7 @@ import java.util.Scanner;
 import org.apache.spark.api.java.JavaPairRDD;
 
 public class B_1_thread {
-	
+
 	final static String input1 = "data/graph/edgelist.txt";
 	final static String input2 = "data/graph/idslabels.txt";
 
@@ -19,7 +19,7 @@ public class B_1_thread {
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 thread: " + (timeB - timeA));
 	}
-	
+
 	public static JavaPairRDD<String, Double> question1_thread(int T, boolean verbose) {
 		ArrayList<HashSet<Integer>> edgeList = getEdgeList();
 		double[] r = new double[edgeList.size()];

@@ -20,7 +20,7 @@ public class B_1_spark {
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 spark: " + (timeB - timeA));
 	}
-	
+
 	public static JavaPairRDD<String, Double> question1_spark(int T, boolean verbose) {
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("eigenvector_centrality");
 		JavaSparkContext sc = new JavaSparkContext(conf);

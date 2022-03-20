@@ -10,7 +10,7 @@ import scala.Tuple2;
 public class B_2 {
 	final static String input1 = "data/graph/edgelist.txt";
 	final static String input2 = "data/graph/idslabels.txt";
-	
+
 	public static void question2_spark() {
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("wordCount");
 		JavaSparkContext sc = new JavaSparkContext(conf);
@@ -40,8 +40,8 @@ public class B_2 {
 		best_page.collect().stream().forEach(page -> {
 			System.out.println("The best page is " + page);
 		});
-		System.out.println("#############################"); 
-		
+		System.out.println("#############################");
+
 		sc.close();
 	}
 }

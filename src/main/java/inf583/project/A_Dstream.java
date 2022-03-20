@@ -139,10 +139,11 @@ public class A_Dstream {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sc.close(); 
+		sc.close();
 	}
-	
+
 	static Integer maximum2 = Integer.MIN_VALUE;
+
 	public static void question4_spark_streaming() throws IOException {
 		maximum2 = Integer.MIN_VALUE;
 		count = 0;
@@ -156,33 +157,31 @@ public class A_Dstream {
 
 		JavaDStream<Integer> Integer_stream = stream.map(x -> Integer.parseInt(x));
 
-		JavaDStream<Integer> hash_stream = Integer_stream.map(x ->x%((int)Math.pow(2, 8)));
-		
-		JavaDStream<Integer> trailingZeros_stream = hash_stream.map(
-			    x->{
-			    	//System.out.println(x);
-			    	int a = x;
-			    	int result = 0;
-			    	if(x ==0) {
-			    		return result;
-			    	}
-			    	else {
-			    		while(a%2 ==0) {
-			    			result +=1;
-			    			a = a/2;
-			    		}
-			    	}
-			    	return result;
-			    }
-			);
-	    JavaDStream<Integer> max_stream = trailingZeros_stream.reduce((a,b)->Math.max(a, b));
+		JavaDStream<Integer> hash_stream = Integer_stream.map(x -> x % ((int) Math.pow(2, 8)));
+
+		JavaDStream<Integer> trailingZeros_stream = hash_stream.map(x -> {
+			// System.out.println(x);
+			int a = x;
+			int result = 0;
+			if (x == 0) {
+				return result;
+			} else {
+				while (a % 2 == 0) {
+					result += 1;
+					a = a / 2;
+				}
+			}
+			return result;
+		});
+		JavaDStream<Integer> max_stream = trailingZeros_stream.reduce((a, b) -> Math.max(a, b));
 		max_stream.foreachRDD(x -> {
 			count = count + 1;
 			x.collect().stream().forEach(n -> {
 				if (n > maximum2) {
 					maximum2 = n;
 				}
-				System.out.println("The number of distinct number after " + count + " windows is : " +Math.pow(2,maximum2));
+				System.out.println(
+						"The number of distinct number after " + count + " windows is : " + Math.pow(2, maximum2));
 			});
 
 		});
@@ -194,7 +193,8 @@ public class A_Dstream {
 		try {
 			jssc.awaitTerminationOrTimeout(10000);
 			jssc.stop();
-			System.out.println("The number of distinct numbers after 10 secondes of streaming is approximatively: " + Math.pow(2,maximum2));
+			System.out.println("The number of distinct numbers after 10 secondes of streaming is approximatively: "
+					+ Math.pow(2, maximum2));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

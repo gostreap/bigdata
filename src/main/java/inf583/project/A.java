@@ -72,7 +72,7 @@ public class A {
 		
 		sc.close();
 	}
-	
+			
 	public static void question4_spark() {
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("wordCount");
 		JavaSparkContext sc = new JavaSparkContext(conf);
