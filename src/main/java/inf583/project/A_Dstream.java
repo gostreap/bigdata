@@ -156,10 +156,11 @@ public class A_Dstream {
 
 		JavaDStream<Integer> Integer_stream = stream.map(x -> Integer.parseInt(x));
 
-		JavaDStream<Integer> hash_stream = Integer_stream.map(x ->(2*x+1)%((int)Math.pow(2, 8)));
+		JavaDStream<Integer> hash_stream = Integer_stream.map(x ->x%((int)Math.pow(2, 8)));
 		
 		JavaDStream<Integer> trailingZeros_stream = hash_stream.map(
 			    x->{
+			    	//System.out.println(x);
 			    	int a = x;
 			    	int result = 0;
 			    	if(x ==0) {
@@ -193,7 +194,7 @@ public class A_Dstream {
 		try {
 			jssc.awaitTerminationOrTimeout(10000);
 			jssc.stop();
-			System.out.println("The number of distinct numbers after 10 secondes of streaming is: " + maximum2);
+			System.out.println("The number of distinct numbers after 10 secondes of streaming is approximatively: " + Math.pow(2,maximum2));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
