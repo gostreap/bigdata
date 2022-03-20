@@ -256,6 +256,7 @@ public class B_3_hadoop {
 	final static String input1 = "data/graph/edgelist.txt";
 	final static String input2 = "data/graph/idslabels.txt";
 	final static String out = "B_hadoop_out2";
+	
 	public static void main(String[] args) throws ClassNotFoundException, IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		

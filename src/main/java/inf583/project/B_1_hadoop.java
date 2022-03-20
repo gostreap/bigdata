@@ -81,10 +81,8 @@ public class B_1_hadoop {
 	   List<String> i = new ArrayList<String>();
 	   Text val = new Text();
 	   int size = 0;
-	   String test_values = "";
 	   for (Text t : values) {
 		 String s = t.toString();
-		 test_values +=s+";";
 	     if(t.charAt(0)=='r') {
 	    	 size ++;
 	    	 val.set(s.split(" ")[1]);
@@ -95,7 +93,6 @@ public class B_1_hadoop {
 	    	 i.add(s+ " "+key.toString());
 	     }
 	   }
-	   //System.out.println("reducer "+ i + " "+ val );
 	   if(size ==1) {
 		   Text ij = new Text();
 		   for(int k = 0; k< i.size(); k++ ) {
@@ -103,8 +100,6 @@ public class B_1_hadoop {
 			  context.write(ij, val);
 		   }
 	   }
-	   /*else
-		   System.out.println("error on reducer: "+test_values);*/
 	 }
 	}
 	
@@ -118,7 +113,6 @@ public class B_1_hadoop {
 		                 ) throws IOException, InterruptedException {
 		   
 		   String[] line = value.toString().split(" ");
-		   //System.out.println(value.toString());
 		   i.set(line[0]);
 		   val.set(line[2]);
 		   context.write(i, val);
@@ -137,7 +131,7 @@ public class B_1_hadoop {
 	   for (Text val : values) {
 		 temp_result += Double.valueOf(val.toString());
 	   }
-	   //System.out.println("reducer "+ i + " "+ val );
+	   //System.out.println("reducer "+ i + " "+ 
 	   result.set(String.valueOf(temp_result));
 	   context.write(key, result);
 	 }
@@ -262,7 +256,8 @@ public class B_1_hadoop {
 	final static String input1 = "data/graph/edgelist.txt";
 	final static String input2 = "data/graph/idslabels.txt";
 	final static String out = "B_hadoop_out";
-	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+	
+	public static void question1_hadoop(int T) throws IOException, ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
 		
 		//initialisation
@@ -270,17 +265,21 @@ public class B_1_hadoop {
 		// Creating unormalized r0
 		create_r0(conf, input2, out+"/iteration_0/r_normalized");
 		
-		int T = 10; //nombre
-		for(int t = 1;t<T; t++) {
-			System.out.println("iteration "+t);
+		for(int t = 1;t < T; t++) {
 			// Calculating product A*r
 			Ar(conf,input1,out+"/iteration_"+(t-1)+"/r_normalized",out+"/iteration_"+(t)+"/Ar");
 			// Calculing norm
 			calculate_norm(conf, out+"/iteration_"+(t)+"/Ar", out+"/iteration_"+(t)+"/norm");
 			//normalizing
-			 normalize(conf, out+"/iteration_"+(t)+"/Ar",out+"/iteration_"+(t)+"/r_normalized");
+			normalize(conf, out+"/iteration_"+(t)+"/Ar",out+"/iteration_"+(t)+"/r_normalized");
 		} 
-		
+	}
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+		long timeA = System.currentTimeMillis();
+		question1_hadoop(3);
+		long timeB = System.currentTimeMillis();
+		System.out.println("Time question1 hadoop: " + (timeB - timeA));
 	}
 
 }
