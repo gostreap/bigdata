@@ -119,15 +119,16 @@ public class B {
 		}
 
 		JavaRDD<String> input = sc.textFile(input1);
+		JavaRDD<String> input_id = sc.textFile(input2);
 		// JavaRDD<Integer> integers = input.mapT(n -> Integer.parseInt(n));
 
-		JavaPairRDD<String, Double> r = input
+		JavaPairRDD<String, Double> r = input_id
 				.mapToPair(line -> new Tuple2<>(String.valueOf(line.split(" ")[0]), (double) 1.0)); // creating r0
 
 		final Double norm = r.map(x -> x._2).reduce((a, b) -> a + b);
 
 		// System.out.println(norm);
-		r = r.mapValues(x -> x / norm);
+		r = r.mapValues(x -> x/norm);
 
 		// creating new A
 		JavaRDD<String> A0 = input.flatMap(line -> {
@@ -196,20 +197,20 @@ public class B {
 		best_page.collect().stream().forEach(page -> {
 			System.out.println("The best page is " + page);
 		});
-		System.out.println("#############################");
-
+		System.out.println("#############################"); 
+		
 		sc.close();
 	}
 
 	public static void main(String[] args) {
-		long timeA = System.currentTimeMillis();
+		/*long timeA = System.currentTimeMillis();
 		question1_spark(3,true,null);
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 spark: " + (timeB - timeA));
 		timeA = System.currentTimeMillis();
 		question1_thread(3);
 		timeB = System.currentTimeMillis();
-		System.out.println("Time question1 thread: " + (timeB - timeA));
-//		question2_spark();
+		System.out.println("Time question1 thread: " + (timeB - timeA));*/
+ 		question2_spark();
 	}
 }

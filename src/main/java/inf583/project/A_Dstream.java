@@ -139,6 +139,65 @@ public class A_Dstream {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		sc.close(); 
+	}
+	
+	static Integer maximum2 = Integer.MIN_VALUE;
+	public static void question4_spark_streaming() throws IOException {
+		maximum2 = Integer.MIN_VALUE;
+		count = 0;
+		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("max_integer_streaming");
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		sc.setLogLevel("ERROR");
+
+		JavaStreamingContext jssc = new JavaStreamingContext(sc, Durations.seconds(1));
+
+		JavaDStream<String> stream = local_stream(jssc, inputFile); // Creating QueueStreaming from local file
+
+		JavaDStream<Integer> Integer_stream = stream.map(x -> Integer.parseInt(x));
+
+		JavaDStream<Integer> hash_stream = Integer_stream.map(x ->(2*x+1)%((int)Math.pow(2, 8)));
+		
+		JavaDStream<Integer> trailingZeros_stream = hash_stream.map(
+			    x->{
+			    	int a = x;
+			    	int result = 0;
+			    	if(x ==0) {
+			    		return result;
+			    	}
+			    	else {
+			    		while(a%2 ==0) {
+			    			result +=1;
+			    			a = a/2;
+			    		}
+			    	}
+			    	return result;
+			    }
+			);
+	    JavaDStream<Integer> max_stream = trailingZeros_stream.reduce((a,b)->Math.max(a, b));
+		max_stream.foreachRDD(x -> {
+			count = count + 1;
+			x.collect().stream().forEach(n -> {
+				if (n > maximum2) {
+					maximum2 = n;
+				}
+				System.out.println("The number of distinct number after " + count + " windows is : " +Math.pow(2,maximum2));
+			});
+
+		});
+		System.out.println("#############################");
+		System.out.println("Question A.4. (Spark streaming Version)");
+		System.out.println("#############################");
+
+		jssc.start();
+		try {
+			jssc.awaitTerminationOrTimeout(10000);
+			jssc.stop();
+			System.out.println("The number of distinct numbers after 10 secondes of streaming is: " + maximum2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		sc.close();
 	}
 
@@ -146,6 +205,7 @@ public class A_Dstream {
 		try {
 			question1_spark_streaming();
 			question2_spark_streaming();
+			question4_spark_streaming();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
