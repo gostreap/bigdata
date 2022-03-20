@@ -231,7 +231,7 @@ public class B_1_hadoop {
 		job.waitForCompletion(true);
 	}
 
-	final static String input1 = "data/graph/edgelist.txt";
+	final static String input1 = "data/graph/edgelist2.txt";
 	final static String input2 = "data/graph/idslabels.txt";
 	final static String out = "B_hadoop_out";
 
@@ -255,7 +255,7 @@ public class B_1_hadoop {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		long timeA = System.currentTimeMillis();
-		question1_hadoop(3);
+		question1_hadoop(10);
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 hadoop: " + (timeB - timeA));
 	}

@@ -15,7 +15,7 @@ public class B_1_thread {
 
 	public static void main(String[] args) {
 		long timeA = System.currentTimeMillis();
-		question1_thread(3, false);
+		question1_thread(10, false);
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 thread: " + (timeB - timeA));
 	}

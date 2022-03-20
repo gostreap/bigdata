@@ -16,7 +16,7 @@ public class B_1_spark {
 
 	public static void main(String[] args) {
 		long timeA = System.currentTimeMillis();
-		B_1_spark.question1_spark(3, false);
+		B_1_spark.question1_spark(10, false);
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 spark: " + (timeB - timeA));
 	}
