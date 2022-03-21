@@ -21,7 +21,7 @@ public class B_1_thread {
 	}
 
 	public static JavaPairRDD<String, Double> question1_thread(int T, boolean verbose) {
-		ArrayList<HashSet<Integer>> edgeList = getEdgeList();
+		ArrayList<ArrayList<Integer>> edgeList = getEdgeList();
 		double[] r = new double[edgeList.size()];
 
 		for (int i = 0; i < r.length; i++) {
@@ -48,7 +48,7 @@ public class B_1_thread {
 		return null;
 	}
 
-	public static double[] matrixMultiplicationThread(ArrayList<HashSet<Integer>> edgeList, double[] r) {
+	public static double[] matrixMultiplicationThread(ArrayList<ArrayList<Integer>> edgeList, double[] r) {
 		Thread[] threads = new Thread[4];
 		double[][] results = new double[4][r.length / 2 + (r.length % 2)];
 		for (int i = 0; i < 4; i++) {
@@ -78,10 +78,10 @@ public class B_1_thread {
 		return new_r;
 	}
 
-	public static ArrayList<HashSet<Integer>> getEdgeList() {
-		ArrayList<HashSet<Integer>> lines = new ArrayList<HashSet<Integer>>();
+	public static ArrayList<ArrayList<Integer>> getEdgeList() {
+		ArrayList<ArrayList<Integer>> lines = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < 64375; i++) { // 64375 the number of nodes
-			lines.add(new HashSet<Integer>());
+			lines.add(new ArrayList<Integer>());
 		}
 		try {
 			File edgelistFile = new File(input1);
@@ -112,12 +112,12 @@ public class B_1_thread {
 
 	public static class BlockMatrixMultiplicationThread implements Runnable {
 
-		private ArrayList<HashSet<Integer>> edgeList;
+		private ArrayList<ArrayList<Integer>> edgeList;
 		private int startI, endI, startJ, endJ;
 		private double[] blockB;
 		private double[] result;
 
-		public BlockMatrixMultiplicationThread(ArrayList<HashSet<Integer>> edgeList, double[] r, int blockA,
+		public BlockMatrixMultiplicationThread(ArrayList<ArrayList<Integer>> edgeList, double[] r, int blockA,
 				double[] result) {
 			// blockA = 0 -> upper left block | blockA = 1 -> upper right block
 			// blockA = 2 -> lower left block | blockA = 3 -> lower right block
@@ -162,8 +162,8 @@ public class B_1_thread {
 		public void run() {
 			for (int i = startI; i < endI; i++) {
 				result[i - startI] = 0;
-				for (int j = startJ; j < endJ; j++) {
-					if (edgeList.get(i).contains(j)) {
+				for (int j: edgeList.get(i)) {
+					if (j >= startJ & j< endJ) {
 						result[i - startI] += blockB[j - startJ];
 					}
 				}
