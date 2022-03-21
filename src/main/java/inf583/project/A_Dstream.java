@@ -204,8 +204,8 @@ public class A_Dstream {
 
 	public static void main(String[] args) {
 		try {
-			question1_spark_streaming();
-			question2_spark_streaming();
+//			question1_spark_streaming();
+//			question2_spark_streaming();
 			question4_spark_streaming();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

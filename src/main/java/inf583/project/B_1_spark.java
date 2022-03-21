@@ -16,15 +16,19 @@ public class B_1_spark {
 
 	public static void main(String[] args) {
 		long timeA = System.currentTimeMillis();
-		B_1_spark.question1_spark(10, false);
+		B_1_spark.question1_spark(10, false, null);
 		long timeB = System.currentTimeMillis();
 		System.out.println("Time question1 spark: " + (timeB - timeA));
 	}
 
-	public static JavaPairRDD<String, Double> question1_spark(int T, boolean verbose) {
-		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("eigenvector_centrality");
-		JavaSparkContext sc = new JavaSparkContext(conf);
-		sc.setLogLevel("ERROR");
+	public static JavaPairRDD<String, Double> question1_spark(int T, boolean verbose, JavaSparkContext sc) {
+		boolean close = false;
+		if (sc == null) {
+			SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("eigenvector_centrality");
+			sc = new JavaSparkContext(conf);
+			sc.setLogLevel("ERROR");
+			close = true;
+		}
 
 		JavaRDD<String> input = sc.textFile(input1);
 		JavaRDD<String> input_id = sc.textFile(input2);
@@ -69,7 +73,9 @@ public class B_1_spark {
 			System.out.println("#############################");
 		}
 
-		sc.close();
+		if(close) {
+			sc.close();			
+		}
 		return r;
 	}
 }

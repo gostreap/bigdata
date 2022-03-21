@@ -1,5 +1,7 @@
 package inf583.project;
 
+import java.io.IOException;
+
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -23,7 +25,7 @@ public class B_2 {
 			return new Tuple2<>(arrLine[0], arrLine[1]);
 		});
 
-		JavaPairRDD<String, Double> eigenVector = B_1_spark.question1_spark(10, false);
+		JavaPairRDD<String, Double> eigenVector = B_1_spark.question1_spark(10, false, sc);
 
 		final Tuple2<String, Double> best_eigenCoordinate = eigenVector.map(x -> x).reduce((a, b) -> {
 			if (a._2 >= b._2) {
@@ -43,5 +45,9 @@ public class B_2 {
 		System.out.println("#############################");
 
 		sc.close();
+	}
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+		question2_spark();
 	}
 }
